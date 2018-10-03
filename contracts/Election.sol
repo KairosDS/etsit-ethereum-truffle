@@ -1,50 +1,62 @@
-pragma solidity 0.4.20;
+//Declaramos la versión para que no se intente compilar con una versión más actualizada
+pragma solidity ^0.4.24;
 
+//Así se declara el contrato, de forma parecida a una clase 
 contract Election {
-    // Model a Candidate
+
+    //Los structs se usan para definir estructuras de elementos
+    //antes de poder guardarlo en la memoria tenemos que inicializar sus valores, así como un lugar donde poder almacenarlos.
     struct Candidate {
         uint id;
         string name;
         uint voteCount;
     }
 
-    // Store accounts that have voted
-    mapping(address => bool) public voters;
-    // Store Candidates
-    // Fetch Candidate
+    //EVENTO:
+    event votedEvent (uint indexed candidateId );
+ 
+    //Los almacenamos en un mapping que tiene Key => Value
+    // Por tener el caracter 'public' se crea un getter automaticamente para poder acceder al valor desde fuera de la blockchain
+    //no hay forma aun de saber cual es el tamaño del mapping, por lo qye necesitamos algo que guarde y cuente el numero de candidatos
     mapping(uint => Candidate) public candidates;
-    // Store Candidates Count
+    //cuenta y si ha votado o no
+    mapping(address => bool) public voters;
+
+    //para llevar la cuenta de los candidatos.
     uint public candidatesCount;
-
-    // voted event
-    event votedEvent (
-        uint indexed _candidateId
-    );
-
-    function Election () public {
-        addCandidate("Candidate 1");
-        addCandidate("Candidate 2");
+    
+     /*El constructor solo es llamado una vez (la primera en la que se despliega el contrato) y sirve para inicializar las variables
+    tiene el mismo nombre que el contrato*/
+    constructor () public {
+        addCandidate("Equipo 1");
+        addCandidate("Equipo 2");
+        addCandidate("Equipo 3");
     }
-
+    //con esta función creo candidatos asociandoles el indice correcto segun cuando llegan a la lista
+    //private porque solo queremos poder llamarla desde dentro del contrato
     function addCandidate (string _name) private {
         candidatesCount ++;
         candidates[candidatesCount] = Candidate(candidatesCount, _name, 0);
     }
 
+    //publico, porque queremos que una cuenta externa le llame.
     function vote (uint _candidateId) public {
-        // require that they haven't voted before
+        //solo deja si no habian votado antes
         require(!voters[msg.sender]);
-
-        // require a valid candidate
+        
+        //requiere que sea un candidato valido
         require(_candidateId > 0 && _candidateId <= candidatesCount);
 
-        // record that voter has voted
+        //guarda que el votante que ha llamado al contrato ya ha votado
         voters[msg.sender] = true;
 
-        // update candidate vote Count
+        //actualizamos la cuenta de votantes
         candidates[_candidateId].voteCount ++;
 
         // trigger voted event
         votedEvent(_candidateId);
     }
 }
+   
+     
+
