@@ -1,3 +1,4 @@
+//se indica el contrato al que se le pasan los tests
 var Election = artifacts.require("./Election.sol");
 
 contract("Election", function(accounts) {
