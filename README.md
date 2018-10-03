@@ -11,22 +11,17 @@ $ npm install -g truffle
 - **Ganache**: red local que sirve para desarrollar aplicaciones en Ethereum en ella podremos hacer nuestras pruebas.  http://truffleframework.com/ganache/
 - **Metamask**: podría considerarse como un puente entre Ethereum y tu navegador sin comprometer tu seguridad https://metamask.io/
 
-## 1. Truffle box
-Primero creamos un repositorio vacio 
+## 1. Clonamos el respositorio
+Vamos a clonar el repositorio de GitHub
 ```sh
-$ mkdir votaciones
-$ cd votaciones
+$ git clone https://github.com/KairosDS/etsit-ethereum-truffle
 ```
-Una vez dentro de nuestro proyecto, vamos a usar la 'Pet Shop box' de Truffle. La instalamos a traves de la linea de comandos de la siguiente forma:
-```sh
-$ truffle unbox pet-shop
-````
+
 Podemos observar que se ha creado la siguiente estructura de directorios:
     .
     ├── build                   
     ├── contracts               
     ├── migrations                    
-    ├── node_modules                    # Dependencias de node       
     ├── src                             # Parte de aplicación cliente
     ├── test                   
     ├── bs-config.json                 
@@ -84,11 +79,17 @@ $ truffle console
 ```
 Por ejemplo, si queremos saber cuantos candidatos están definidos escribimos lo siguiente en la consola
 ```js
-$ Election.deployed().then(function(instance) { app = instance })
-$ app.candidatesCount()
+> Election.deployed().then(function(instance) { app = instance })
+> app.candidatesCount()
 ```
 La función **deployed()** recupera la instancia desplegada en el contrato y se le asigna una variable de aplicación dentro de la función **app**. Por tanto la segunda sentencia, devuelve el valor de la variable **candidatesCount()** que vive en la blockchain.
 
+Otra funcionalidad por ejemplo que se puede probar desde la consola es la de votar: 
+
+ ```js
+ > Election.deployed().then((instance) => {return instance.vote(2, {from: '0x1a016be703c32066486f752364f18dec49528725'})}).then((res) => {console.log(res)})
+ ```
+ 
 Podeis encontrar más información de como interactuar con el contrato a traves de la consola en el siguiente enlace:
 https://truffleframework.com/docs/truffle/getting-started/interacting-with-your-contracts
 
@@ -102,10 +103,17 @@ Los vamos a definir con JavaScript. Para pasarlos a nuestro código escribimos p
 Una vez hayamos añadido la extensión de Metamask a Google Chrome tendremos que crearnos una cuenta y conectar Metamask a nuestra red local de Ethereum que nos proporciona Ganache (En nuestro caso HTTP://127.0.0.1:8545). 
 Por último importamos las cuentas que ha generado Ganache.
 
-
 ## 8. Ejecutamos la aplicación
 ```js
 $ npm run dev
 ```
 En tu navegador ` http://localhost:3000`
 A la hora de trabajar con la aplicación desde el navegador, es conveniente que probemos r todas las funcionalidades que se han implementado en el Smart Contract, es decir, que una vez votas desde una cuenta de Ethereum no puedes volver a votar, y que al cambiar de cuenta y votar se va guardando la clasificación.
+
+
+
+
+
+
+
+
