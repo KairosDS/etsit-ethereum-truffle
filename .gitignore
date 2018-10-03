@@ -1,1 +1,3 @@
 node_modules
+build/contracts/Migration.json
+build/contracts/Election.json
